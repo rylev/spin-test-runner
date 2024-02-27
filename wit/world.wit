@@ -1,0 +1,39 @@
+package component:spin-test-runner;
+
+world test-runner {
+    export runner;
+    export host-impls;
+    import spin;
+}
+
+interface runner {
+    use wasi:http/types@0.2.0.{incoming-request as http-request, incoming-response as http-response};
+    use host-impls.{key-value};
+    resource runtime-builder {
+        constructor();
+        key-value: func(key-value: key-value);
+        build: func() -> runtime;
+    }
+        
+    resource runtime {
+        trigger-http: func(req: http-request) -> http-response;
+    }
+}
+
+interface spin {
+    use wasi:http/types@0.2.0.{incoming-request as http-request, incoming-response as http-response};
+    /// A test runtime instance
+    resource instance {
+        create: static func() -> result<instance, string>;
+        /// Call the http incoming-request handler on the instance
+        trigger-http: func(req: http-request) -> http-response;
+    }
+}
+
+interface host-impls {
+    resource key-value {
+        constructor();
+        set: func(key: string, value: list<u8>);
+        state: func() -> list<tuple<string, list<u8>>>;
+    }
+}
