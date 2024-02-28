@@ -14,7 +14,7 @@ interface runner {
         key-value: func(key-value: key-value);
         build: func() -> runtime;
     }
-        
+
     resource runtime {
         trigger-http: func(req: http-request) -> http-response;
     }

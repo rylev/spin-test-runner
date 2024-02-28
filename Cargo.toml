@@ -4,17 +4,9 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-wit-bindgen = { version = "0.18.0", default-features = false, features = [
-    "realloc",
-] }
-
-[lib]
-crate-type = ["cdylib"]
-
-[package.metadata.component]
-package = "component:spin-test-runner"
-
-[package.metadata.component.target.dependencies]
-"wasi:http" = { path = "./wit/deps/http" }
-"wasi:clocks" = { path = "./wit/deps/clocks" }
-"wasi:io" = { path = "./wit/deps/io" }
+async-trait = "0.1"
+cap-std = "2.0.1"
+tokio = { version = "1.0", features = ["full"] }
+wasmtime = "18.0"
+wasmtime-wasi = "18.0"
+wasmtime-wasi-http = "18.0.1"

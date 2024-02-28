@@ -1,0 +1,20 @@
+[package]
+name = "spin-test-runner"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+wit-bindgen = { version = "0.18.0", default-features = false, features = [
+    "realloc",
+] }
+
+[lib]
+crate-type = ["cdylib"]
+
+[package.metadata.component]
+package = "component:spin-test-runner"
+
+[package.metadata.component.target.dependencies]
+"wasi:http" = { path = "./wit/deps/http" }
+"wasi:clocks" = { path = "./wit/deps/clocks" }
+"wasi:io" = { path = "./wit/deps/io" }
