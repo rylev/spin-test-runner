@@ -7,6 +7,8 @@ edition = "2021"
 wit-bindgen = { version = "0.18.0", default-features = false, features = [
     "realloc",
 ] }
+spin-loader = { git = "https://github.com/fermyon/spin", branch = "main", default-features = false }
+tokio = "1.0"
 
 [lib]
 crate-type = ["cdylib"]
