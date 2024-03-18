@@ -7,32 +7,46 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use bindings::component::spin_test_runner::spin::Instance as InnerInstance;
 use bindings::exports::component::spin_test_runner::{
     host_impls::GuestKeyValue,
-    runner::{GuestRuntime, GuestRuntimeBuilder, HttpRequest, HttpResponse},
+    runner::{self, GuestRuntime, GuestRuntimeBuilder, HttpRequest, HttpResponse},
 };
-use wit_bindgen::Resource;
+use bindings::{
+    component::spin_test_runner::spin::Instance as InnerInstance,
+    exports::component::spin_test_runner::host_impls,
+};
+
+struct Guest;
+
+impl host_impls::Guest for Guest {
+    type KeyValue = KeyValue;
+}
+impl runner::Guest for Guest {
+    type Runtime = Runtime;
+    type RuntimeBuilder = RuntimeBuilder;
+}
 
 pub struct RuntimeBuilder {
     manifest_path: PathBuf,
-    kv: RefCell<Option<Resource<KeyValue>>>,
+    kv: RefCell<Option<host_impls::KeyValue>>,
 }
 
 impl GuestRuntimeBuilder for RuntimeBuilder {
     fn new() -> Self {
-        let manifest_path = find_manifest_path().expect("TODO").expect("TODO");
+        let manifest_path = find_manifest_path()
+            .expect("error finding manifest path")
+            .expect("no manifest found in any parent directory");
         Self {
             manifest_path,
             kv: RefCell::new(None),
         }
     }
 
-    fn key_value(&self, key_value: Resource<KeyValue>) {
+    fn key_value(&self, key_value: host_impls::KeyValue) {
         *self.kv.borrow_mut() = Some(key_value);
     }
 
-    fn build(&self) -> Resource<Runtime> {
+    fn build(&self) -> runner::Runtime {
         let locked_app = tokio::runtime::Builder::new_current_thread()
             .build()
             .unwrap()
@@ -64,7 +78,7 @@ impl GuestRuntimeBuilder for RuntimeBuilder {
         // We would use that from the `trigger_http` method below.
         let spin = Instance::up(&self.manifest_path.display().to_string()).unwrap();
         let runtime = Runtime { instance: spin };
-        Resource::new(runtime)
+        runner::Runtime::new(runtime)
     }
 }
 
@@ -131,3 +145,5 @@ impl Instance {
         self.inner.trigger_http(req)
     }
 }
+
+bindings::export!(Guest with_types_in bindings);

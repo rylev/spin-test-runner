@@ -4,9 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-wit-bindgen = { version = "0.18.0", default-features = false, features = [
-    "realloc",
-] }
+wit-bindgen-rt = "0.22.0"
 spin-loader = { git = "https://github.com/fermyon/spin", branch = "main", default-features = false }
 tokio = "1.0"
 

@@ -2029,7 +2029,7 @@ version = "0.1.0"
 dependencies = [
  "spin-loader",
  "tokio",
- "wit-bindgen",
+ "wit-bindgen-rt",
 ]
 
 [[package]]
@@ -3251,13 +3251,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "wit-bindgen"
-version = "0.18.0"
+name = "wit-bindgen-rt"
+version = "0.22.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5408d742fcdf418b766f23b2393f0f4d9b10b72b7cd96d9525626943593e8cc0"
-dependencies = [
- "bitflags 2.4.2",
-]
+checksum = "fcb8738270f32a2d6739973cbbb7c1b6dd8959ce515578a6e19165853272ee64"
 
 [[package]]
 name = "wit-parser"
